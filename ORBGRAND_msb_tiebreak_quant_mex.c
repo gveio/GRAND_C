@@ -204,7 +204,7 @@ void ORBGRAND(double *y_decoded,double *n_guesses,double *y_soft,uint8_t *H,uint
     for (uint64_t i = 0; i < n; i++) {
         // Clip and quantize
         double L = fmax(fmin(y_soft[i], LLR_max), -LLR_max);
-        LLR_mag_q[i] = round(fabs(L) / LLR_max * (pow(2, B_mag) - 1));
+        LLR_mag_q[i] = round(fabs(L));
         sorted_list_q[i] = i;
     }
     for (uint64_t i = n; i < n_effective; i++) {

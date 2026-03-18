@@ -104,7 +104,7 @@ void ORBGRAND(double *y_decoded,double *n_guesses,double *y_soft,uint8_t *H,uint
     const double LLR_max = 31;
     const int B = 6;
     const int B_mag = B - 1;
-    const int MSB_NUM = 2; // number of MSBs to extract
+    const int MSB_NUM = 3; // number of MSBs to extract
 
     uint64_t msb_shift = B_mag - MSB_NUM;
     uint64_t pad_val   = (1ULL << MSB_NUM) - 1;
