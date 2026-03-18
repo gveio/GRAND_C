@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+GG
 void mountain_build(int *u, int k, int w, int W1, int n1){
     int i,W2,q,r;
 
