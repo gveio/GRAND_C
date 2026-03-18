@@ -105,22 +105,14 @@ static inline int key_lt(uint32_t a, uint32_t b, int use_tiebreak,
  * Mixed precision in stages:
  * - Always: MSB_NUM (e.g., 3) is used as primary sort key.
  * - Last 2 stages (w >= n/2): add LSB_NUM (e.g., 2) tie-break.
- *
- * Optional pruning:
- * - it prunes compare–swaps that only permute the [104...n-1] tail indices
- * - in the final stage. This is based on the observation that in the final stage,
- * - the lowest 24 magnitudes (for n=128) are very unlikely to change their relative order.
  */
 void bitonic_sort_msb3_tiebreak_last2(uint32_t *mag_q,
                                       uint32_t *ind_order,
                                       uint64_t n,
                                       const int B_MAG,
                                       const int MSB_NUM,
-                                      const int LSB_NUM,
-                                      int prune_final_stage)
+                                      const int LSB_NUM)
 {
-    uint64_t pruned_pairs = 0;
-
     for (uint64_t w = 2; w <= n; w <<= 1) { // stages
 
         // last 2 stages => w >= n/2 (for n=128 -> w=64,128)
@@ -132,12 +124,6 @@ void bitonic_sort_msb3_tiebreak_last2(uint32_t *mag_q,
 
                 uint64_t l = i ^ j;
                 if (l <= i) continue;
-
-                if (prune_final_stage && w == n) {
-                    if (i >= (uint64_t)104 && l >= (uint64_t)104) { 
-                        continue; 
-                    }
-                }
 
                 int asc = ((i & w) == 0);
 
@@ -226,7 +212,7 @@ void ORBGRAND(double *y_decoded,double *n_guesses,double *y_soft,uint8_t *H,uint
         sorted_list_q[i] = i;
     }
 
-   bitonic_sort_msb3_tiebreak_last2(LLR_mag_q, sorted_list_q, n_effective,B_mag, MSB_NUM, LSB_NUM,1);
+   bitonic_sort_msb3_tiebreak_last2(LLR_mag_q, sorted_list_q, n_effective,B_mag, MSB_NUM, LSB_NUM);
 
     while(n_guesses[0]<n_guesses_max){
         W++; /*Increment logistic weight*/
