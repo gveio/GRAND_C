@@ -47,6 +47,25 @@ uint8_t memb_check(uint8_t *y, uint8_t *H,uint64_t n,uint64_t s){
     return 0;
 }
 
+void mountain_build(int32_t *u, int32_t kk, int32_t w, int32_t W1, int32_t n1){
+    size_t i;
+    uint64_t W2,q,r;
+
+    for(i = kk + 1; i < w; i++)
+        u[i] = u[kk];
+    W2 = W1;
+    for( i = 0; i < w; i++)
+        W2 -= u[i];
+    q = floor( W2 / (n1 - u[kk]) );
+    r = W2 - q*(n1 - u[kk]);
+    if (q != 0){
+        for(i = w-q; i < w; i++)
+            u[i] = n1;
+    }
+    if (w > q)
+        u[w-q-1] = u[w-q-1] + r;
+}
+
 void bitonic_sort(double *arr,uint32_t *ind_order,uint64_t n) {
     size_t i, j, w, l, temp_index;
     double temp;
@@ -71,25 +90,6 @@ void bitonic_sort(double *arr,uint32_t *ind_order,uint64_t n) {
             }
         }
     }
-}
-
-void mountain_build(int32_t *u, int32_t kk, int32_t w, int32_t W1, int32_t n1){
-    size_t i;
-    uint64_t W2,q,r;
-
-    for(i = kk + 1; i < w; i++)
-        u[i] = u[kk];
-    W2 = W1;
-    for( i = 0; i < w; i++)
-        W2 -= u[i];
-    q = floor( W2 / (n1 - u[kk]) );
-    r = W2 - q*(n1 - u[kk]);
-    if (q != 0){
-        for(i = w-q; i < w; i++)
-            u[i] = n1;
-    }
-    if (w > q)
-        u[w-q-1] = u[w-q-1] + r;
 }
 
 void ORBGRAND(double *y_decoded,double *n_guesses,double *y_soft,uint8_t *H,uint64_t n,uint64_t s,uint64_t n_guesses_max){
